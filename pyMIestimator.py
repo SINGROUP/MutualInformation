@@ -1,11 +1,12 @@
 import numpy as np
 
-def pyMIestimator(X,Y,k=5):
+def pyMIestimator(X,Y,k=5,base=np.exp(1)):
 # pyMIestimator is a function for estimating Mutual Information
 #
 # Inputs function:
 # X,Y         : an N x M matrix (samples x features)
 # k           : the number of nearest neighbour
+# unit base   : base=2 -> Shannon (bits), base=exp(1)=nat
 #
 # Outputs function:
 # I1, I2      : mutual information estimates
@@ -83,8 +84,8 @@ def pyMIestimator(X,Y,k=5):
         ny2[i] = sum(dyS <= Eps[i])
 
     # Estimating Mutual Information:
-    I1 = digamma(k) - (sum(digamma(nx1 + 1) + digamma(ny1 + 1)) / N) + digamma(N)
-    I2 = digamma(k) - 1.0/k - (sum(digamma(nx2) + digamma(ny2)) / N) + digamma(N)
+    I1 = (digamma(k) - (sum(digamma(nx1 + 1) + digamma(ny1 + 1)) / N) + digamma(N) ) / np.log(base)
+    I2 = (digamma(k) - 1.0/k - (sum(digamma(nx2) + digamma(ny2)) / N) + digamma(N) ) / np.log(base)
 
     I1=np.sign(I1)*np.sqrt(1-np.exp(-2*abs(I1)))
     I2=np.sign(I2)*np.sqrt(1-np.exp(-2*abs(I2)))
