@@ -20,6 +20,3 @@ k=5
 [I1,I2]=pyMIestimator(X,Y,k)
 print I1, I2
 
-base=np.exp(1)
-test1=np.log(base)
-print test1
