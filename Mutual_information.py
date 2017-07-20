@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import numpy as np
 
 def pyMIestimator(X,Y,k=5,base=np.exp(1)):
