@@ -25,7 +25,7 @@ def pyMIestimator(X,Y,k=5,base=np.exp(1)):
 #    Measuring correlations in metabolomic networks with mutual information,
 #    Genome Informatics 20 (2008): 112-122.
 
-    [N,M] = X.shape #  The number of samples
+    N = X.shape[0] #  The number of samples
 
     # Calculate the distance between each data point (sample)
     # and its k-th nearest neighbour:
@@ -36,7 +36,7 @@ def pyMIestimator(X,Y,k=5,base=np.exp(1)):
     for i in range(0,N):
         for j in range(0,N):
             dx[i,j] = np.sqrt(np.sum((X[i,:] - X[j,:])**2))
-            dy[i,j] = np.sqrt(sum((Y[i,:] - Y[j,:])**2))
+            dy[i,j] = np.sqrt(np.sum((Y[i,:] - Y[j,:])**2))
             dz[i,j] = max([dx[i,j], dy[i,j]])
 
 
