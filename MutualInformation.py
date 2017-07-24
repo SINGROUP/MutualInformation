@@ -46,20 +46,18 @@ def pyMIestimator(X,Y,k=5,base=np.exp(1)):
             print('\r'+'({0:-<10})'.format('>'*int(i/float(N-1)*10))+('\n' if (i+1)==N else ''),end='')
 
         buffer_X[:]=X[i]
-        try:
-            dx=np.linalg.norm(buffer_X-X,axis=(tuple(range(1,len(X.shape)))))
-        except ValueError:
-            dx=np.absolute(buffer_X-X)
+        dx=np.absolute(buffer_X-X)
+        for j in reversed(range(1,len(X.shape))):
+            dx=np.linalg.norm(dx,axis=j)
         dxS = np.delete(dx,i,0)
         #Scaling
         buffer_max=np.amax(dxS)
         dxS_scaled=dxS/(buffer_max if buffer_max != 0 else 1)
 
         buffer_Y[:]=Y[i]
-        try:
-            dy=np.linalg.norm(buffer_Y-Y,axis=(tuple(range(1,len(X.shape)))))
-        except ValueError:
-            dy=np.absolute(buffer_Y-Y)
+        dy=np.absolute(buffer_Y-Y)
+        for j in reversed(range(1,len(Y.shape))):
+            dy=np.linalg.norm(dy,axis=j)
         dyS = np.delete(dy,i,0)
         #Scaling
         buffer_max=np.amax(dyS)
