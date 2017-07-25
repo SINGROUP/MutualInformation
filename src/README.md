@@ -10,8 +10,17 @@ It takes in two numpy array files as command line inputs and outputs the mutual 
 
 Usage: 
 
+```python
+import MutualInformation as MI
+import numpy as np
+
+X=np.load('<numpy array file 1>')
+Y=np.load('<numpy array file 2>')
+I=MI.pyMIestimator(X,Y)
 ```
-./Mutual_information.py [-k<k value>] <numpy array file 1> <numpy array file 2> [<index for .dat file>]
+
+```
+./MutualInformation.py [-k<k value>] <numpy array file 1> <numpy array file 2> [<index for .dat file>]
 ```
 
 Options:
