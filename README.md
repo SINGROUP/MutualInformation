@@ -32,17 +32,18 @@ Options:
         number or index for easy plotting against Mutual information from .dat file
 
 Useful properties:
+-----------------
 
-    Theoretical maximum
-        Maximum mutual information can be understood to be of a variable with itself, i.e. I(X,X). This is given by:
-        ```python
-        I = (MI.digamma(N)-MI.digamma(k+1))/np.log(base) #default k = 5, base = np.exp(1)
-        ```
-        This also implies that the number of instances cannot be less than or equal to k+1. Good rule of thumb is to have instances >> k (atleast 10 times).
+Theoretical maximum
+Maximum mutual information can be understood to be of a variable with itself, i.e. I(X,X). This is given by:
+```python
+I = (MI.digamma(N)-MI.digamma(k+1))/np.log(base) #default k = 5, base = np.exp(1)
+```
+This also implies that the number of instances cannot be less than or equal to k+1. Good rule of thumb is to have instances >> k (atleast 10 times).
 
-    Transfering Mutual Information
-        To transfer mutual information calculated using two arrays with N instances to M instances:
-        ```python
-        I_M = I_N + (- MI.digamma(N) + MI.digamma(M))/np.log(base) #defaule base = np.exp(1)
-        ```
-        This is useful when comparing mutual information calculated with different number of instances.
+Transfering Mutual Information
+To transfer mutual information calculated using two arrays with N instances to M instances:
+```python
+I_M = I_N + (- MI.digamma(N) + MI.digamma(M))/np.log(base) #defaule base = np.exp(1)
+```
+This is useful when comparing mutual information calculated with different number of instances.
