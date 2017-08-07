@@ -1,0 +1,6 @@
+I(Natural_numbers-500.npy;Natural_numbers_squared-500.npy) = 4.23199009666 500 natural numbers
+I(Natural_numbers-1000.npy;Natural_numbers_squared-1000.npy) = 4.92498752722 1000 natural numbers
+
+# Note:
+# I(1000) ~ I(500) + MI.digamma(1000) - MI.digamma(500)
+# I(1000) = 4.92498752722; I(500) + MI.digamma(1000) - MI.digamma(500) = 4.9256375272198225
