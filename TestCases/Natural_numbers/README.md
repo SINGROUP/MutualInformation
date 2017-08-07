@@ -25,9 +25,9 @@ MI.digamma(1000)-MI.digamma(6)
 
 Transferring mutual information for 500 instances to 1000 instances to compare:
 
-'''python
+```python
 I_500 + MI.digamma(1000) - MI.digamma(500)
 >>> 4.9256375272198225
-'''
+```
 
 This value is very close to the mutual information with 1000 instances. Implying transfering to same instances is important to compare and it works
