@@ -30,6 +30,11 @@ Options:
         
     <index for .dat file>
         number or index for easy plotting against Mutual information from .dat file
+        
+mutual_information_parallel.py
+---------------------
+
+Parallel implementation of mutual_information.py. Spawns processes, equal to number of available cpus, otherwise implementation as same as mutual_information.py.
 
 Useful properties:
 -----------------
