@@ -59,6 +59,7 @@ def pyMIestimator(X,Y,k=5,base=np.exp(1)):
     # list argument, makes it super easy to implement
     sum_psi = p.map(get_sum_psi_nxi_nyi,
                      [[X, Y, k, i] for i in range(N)])
+    p.close()
     sum_psi = sum(sum_psi)
 
     # Estimating Mutual Information:
