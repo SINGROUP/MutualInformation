@@ -16,7 +16,7 @@ import numpy as np
 
 X = np.load('<numpy array file 1>') # X.size = (N,...)
 Y = np.load('<numpy array file 2>') # Y.size = (N,...)
-I = mi.pymiestimator(X, Y) #default k = 5, base = np.exp(1)
+I = mi.pyMIestimator(X, Y) #default k = 5, base = np.exp(1)
 ```
 
 ```
@@ -31,11 +31,6 @@ Options:
     <index for .dat file>
         number or index for easy plotting against Mutual information from .dat file
         
-mutual_information_parallel.py
----------------------
-
-Parallel implementation of mutual_information.py. Spawns processes, equal to number of available cpus, otherwise implementation as same as mutual_information.py.
-
 Useful properties:
 -----------------
 
@@ -45,10 +40,3 @@ Maximum mutual information can be understood to be of a variable with itself, i.
 I = (mi.digamma(N) - mi.digamma(k+1)) / np.log(base) #default k = 5, base = np.exp(1)
 ```
 This also implies that the number of instances cannot be less than or equal to k+1. Good rule of thumb is to have instances >> k (atleast 10 times).
-
-Transfering Mutual Information
-To transfer mutual information calculated using two arrays with N instances to M instances:
-```python
-I_M = I_N + (- mi.digamma(N) + mi.digamma(M)) / np.log(base) #defaule base = np.exp(1)
-```
-This is useful when comparing mutual information calculated with different number of instances.

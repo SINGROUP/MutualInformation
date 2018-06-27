@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import numpy as np
+from scipy.spatial.distance import squareform, pdist
 
 def pyMIestimator(X,Y,k=5,base=np.exp(1)):
 #    pyMIestimator is a function for estimating Mutual Information
@@ -47,82 +48,36 @@ def pyMIestimator(X,Y,k=5,base=np.exp(1)):
 #    Genome Informatics 20 (2008): 112-122.
 
     N = X.shape[0] #  The number of samples
+    
+    # distance matrices
+    dist_X = squareform(pdist(X.reshape((N, -1))))
+    dist_Y = squareform(pdist(Y.reshape((N, -1))))
 
-    # Count nx(i) and ny(i) using the criteria defined in 
-    # Kraskov et al. (2004)
-    #nx1 = np.zeros(N)
-    #ny1 = np.zeros(N)
-    nx2 = np.zeros(N)
-    ny2 = np.zeros(N)
-    # Matrices to buffer i'th instance of X & Y, N times
-    buffer_X = np.zeros(X.shape)
-    buffer_Y = np.zeros(Y.shape)
+    # scaling
+    dist_X /= np.std(dist_X, axis=1, keepdims=True)
+    dist_Y /= np.std(dist_Y, axis=1, keepdims=True)
+
+    # index matrix
+    dist_Z = np.maximum(dist_X, dist_Y)
+    indx = np.argsort(dist_Z)[:, k-1]
+
+    # psi
+    psi = 0
 
     for i in range(N):
-        # Fancy progress bar
-        if True and N != 1:
-            print('\r' + '({0:-<10})'.format('>'*int(i/float(N-1)*10))
-                  + ('\n' if (i+1)==N else ''), end='')
+        nx = np.sum(dist_X[i, :] <= dist_X[i, indx[i]])
+        ny = np.sum(dist_Y[i, :] <= dist_Y[i, indx[i]])
+        psi += digamma(nx) + digamma(ny)
 
-        buffer_X[:] = X[i]
-        dx = np.absolute(buffer_X - X)
-        for j in reversed(range(1, len(X.shape))):
-            dx = np.linalg.norm(dx, axis=j)
-        dxS = np.delete(dx,i,0)
-        # Scaling
-        buffer_max = np.amax(dxS)
-        dxS_scaled = dxS / (buffer_max if buffer_max != 0 else 1)
-
-        buffer_Y[:] = Y[i]
-        dy = np.absolute(buffer_Y - Y)
-        for j in reversed(range(1, len(Y.shape))):
-            dy = np.linalg.norm(dy, axis=j)
-        dyS = np.delete(dy, i, 0)
-        # Scaling
-        buffer_max = np.amax(dyS)
-        dyS_scaled = dyS / (buffer_max if buffer_max != 0 else 1)
-
-        # Z space
-        dzS = np.maximum(dxS_scaled, dyS_scaled)
-
-        dzSort = np.argsort(dzS) #indices of sorted array
-        '''
-        ## For algorithm 1:
-        # Eps is epsilon(i)/2
-        # Eps is the distance from sample z(i) to its k-th neighbor
-        Eps = dzS[dzSort[k-1]]
-        # count the number nx(i) of points x(j) whose distance from
-        # x(i) is
-        # strictly less than Eps, and similarly for y :
-        nx1[i] = sum(dxS_scaled <= Eps)
-        ny1[i] = sum(dyS_scaled <= Eps)
-        '''
-        ## For algorithm 2:
-        # Epsn is epsilon_n(i)/2
-        # Epsn is the distance from sample n(i) to its k-th neighbor
-        # in z space
-        # where n=x,y
-        Epsx = dxS_scaled[dzSort[k-1]]
-        Epsy = dyS_scaled[dzSort[k-1]]
-        # we replace nx(i) and ny(i) by the number of points with
-        # ||x(i)-x(j)|| <= Epsx(i) and ||y(i)-y(j)|| <= Epsy(i)
-        nx2[i] = sum(dxS_scaled <= Epsx)
-        ny2[i] = sum(dyS_scaled <= Epsy)
-
-    # Estimating Mutual Information:
-    #I1 = (digamma(k) - ((sum(map(digamma,nx1 + 1))
-    #      + sum(map(digamma,ny1 + 1))) / N)
-    #      + digamma(N) ) / np.log(base)
-    I2 = (digamma(k) - 1/float(k)
-          - (sum(list(map(digamma, nx2)) + list(map(digamma, ny2))) / N)
+    # mutual information
+    I = (digamma(k) - 1/float(k)
+          - (psi / N)
           + digamma(N) ) / np.log(base)
 
     # No negative MI:
-#    if I1 < 0: I1 = 0
-    if I2 < 0: I2 = 0
+    if I < 0: I = 0
 
-#    return I1, I2
-    return I2
+    return I
 
 '''
 #digamma function using recursion; 
